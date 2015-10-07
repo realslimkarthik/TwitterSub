@@ -26,7 +26,7 @@ CREATE TABLE `tweet` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `tweet` varchar(140) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=Aria DEFAULT CHARSET=utf8 PAGE_CHECKSUM=1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 PAGE_CHECKSUM=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -71,7 +71,7 @@ CREATE TABLE `user_preferences` (
   `username` varchar(40) NOT NULL,
   `topic` varchar(50) NOT NULL,
   UNIQUE KEY `username` (`username`,`topic`)
-) ENGINE=Aria DEFAULT CHARSET=utf8 PAGE_CHECKSUM=1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 PAGE_CHECKSUM=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -95,7 +95,7 @@ CREATE TABLE `users` (
   `username` varchar(40) NOT NULL,
   `last_update` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`username`)
-) ENGINE=Aria DEFAULT CHARSET=utf8 PAGE_CHECKSUM=1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 PAGE_CHECKSUM=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
