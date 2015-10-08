@@ -1,10 +1,27 @@
+var config = require('config');
 var Twitter = require('twitter');
-var twitterClient = new Twitter({
-    consumer_key: 'Koa0XC6s5Lb5oNgJFnMVqi8ch',
-    consumer_secret: 'Va2eWsve8tLMJjO3REkydZmWBuSxa2qtoiSuK2C9XEzNUSsJEn',
-    access_token_key: '478809538-uTAWlWI3j6hbSs0bb8PZ3OrGCBel9QM8oD570lhH',
-    access_token_secret: 'f4HIIYiP9eR6uyZg43oLZwoEcrYGmcUnZttDkdIEAn95U'
-});
+var twitterClient = new Twitter(config.twitter_credentials);
+
+define(function (require) {
+    var singleton = function() {
+        return {
+
+        };
+    };
+    return singleton();
+})
+
+var streamer = undefined;
+function start_streaming(streamer, track_string) {
+    if(track_string) {
+        streamer = twitterClient.stream('statuses/filter', {track: trackString}, function(stream) {
+            stream.on('data', function(tweet) {
+                console.log(tweet);
+            });
+        });
+    }
+    return streamer;
+}
 
 
 var MySqlDb = require('mysql');
@@ -23,15 +40,22 @@ mySqlClient.connect(function(err) {
     console.log('Connected as id ' + mySqlClient.threadId);
 });
 
-var trackString = '';
-mySqlClient.query('SELECT DISTINCT * FROM user_preferences;', function(err, rows, fields) {
-    if(err) throw err;
 
-    rows.forEach(function(r) {
-        trackString += r.topic + ',';
+function getTopics() {
+    var trackString = '';
+    mySqlClient.query('SELECT DISTINCT topic FROM user_preferences;', function(err, rows, fields) {
+        if(err) throw err;
+
+        rows.forEach(function(r) {
+            trackString.concat(r.topic + ', ');
+        });
     });
-});
-console.log(trackString + 'is trackstring');
+    return trackString;
+}
+
+
 exports.twitterClient = twitterClient;
 exports.mySqlClient = mySqlClient;
-exports.trackString = trackString;
+exports.getTopics = getTopics;
+exports.start_streaming = start_streaming;
+exports.streamer = streamer;
